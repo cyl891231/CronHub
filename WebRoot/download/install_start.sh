@@ -50,8 +50,9 @@ fi
 mkdir -p $install_path
 cd $install_path;
 jdk_bin="jdk.bin";
+jdk_version=`java -version 2>&1|grep version |awk -F'"' '{print $2}'`;
 jdk_bin_path=$install_path"/"$jdk_bin;
-java_home=$install_path"/jdk1.6.0_30";
+java_home=$install_path"/jdk"$jdk_version;
 base_url="http://${center_server_ip}:${center_server_port}/download/";
 jdk_download_url=$base_url"jdk-6u30-linux-x64.bin"
 jsvc_zip="jsvc.zip";
@@ -124,7 +125,7 @@ echo -e "#description:cronhub_daemon
 #chkconfig:231 80 80
 case \"\$1\" in
 start)
-\t${install_path}/jsvc/jsvc -home ${install_path}/jdk1.6.0_30 -Xmx2000m -pidfile ${install_path}/$daemon_port.pid -cp ${install_path}/DispatchSystemDaemon.jar com.baofeng.dispatchexecutor.boot.DaemonBoot -p $daemon_port
+\t${install_path}/jsvc/jsvc -home ${install_path}/jdk${jdk_version} -Xmx2000m -pidfile ${install_path}/$daemon_port.pid -cp ${install_path}/DispatchSystemDaemon.jar com.baofeng.dispatchexecutor.boot.DaemonBoot -p $daemon_port
 \t;;
 esac
 " > /etc/init.d/cronhub_daemon
